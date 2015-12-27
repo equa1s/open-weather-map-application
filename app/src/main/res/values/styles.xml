@@ -1,0 +1,11 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">#ffffb032</item>
+        <item name="searchViewStyle">@style/AppSearchViewStyle</item>
+    </style>
+    <style name="AppSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="queryBackground">@android:color/transparent</item>
+        <item name="searchIcon">@mipmap/ic_search_black_36dp</item>
+        <item name="android:imeActionId">6</item>
+    </style>
+</resources>
