@@ -32,6 +32,7 @@ public class OpenWeatherRestController {
                     Log.d(TAG, openWeatherPojo.toString());
                     getResponseCallbackListener().onFetchProgress(openWeatherPojo);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     getResponseCallbackListener().onFetchFailed();
                 }
                 getResponseCallbackListener().onFetchComplete();

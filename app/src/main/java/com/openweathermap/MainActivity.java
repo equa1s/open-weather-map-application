@@ -1,10 +1,8 @@
 package com.openweathermap;
 
-import android.content.ContentResolver;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,15 +25,13 @@ import com.openweathermap.model.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 
-public class MainActivity extends ActionBarActivity implements OpenWeatherRestController.ResponseCallbackListener,
+public class MainActivity extends AppCompatActivity implements OpenWeatherRestController.ResponseCallbackListener,
         SearchView.OnQueryTextListener {
 
     private final String TAG = getClass().getSimpleName();
-    private final int FIRST = 0;
     private OpenWeatherRestController mOpenWeatherRestController;
-    private TextView responseTextView, city, temp, desc, pressure, humidity, lon, lat;
+    private TextView city, temp, desc, pressure, humidity, lon, lat;
     private LinearLayout startLayout, resultLayout, progressLayout, anotherInfoLayout;
-    private Toolbar mActionBarToolbar;
     private ImageView imageViewWeather;
 
 
@@ -57,7 +53,7 @@ public class MainActivity extends ActionBarActivity implements OpenWeatherRestCo
         final MenuItem search = menu.findItem(R.id.action_search);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
-            searchView.setQueryHint("Type city here...");
+            searchView.setQueryHint("Please enter city");
             searchView.setOnQueryTextListener(this);
             searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -79,7 +75,6 @@ public class MainActivity extends ActionBarActivity implements OpenWeatherRestCo
     }
 
     private void initializeView() {
-        responseTextView    = (TextView) findViewById(R.id.response);
         city                = (TextView) findViewById(R.id.textViewCity);
         temp                = (TextView) findViewById(R.id.textViewTemp);
         desc                = (TextView) findViewById(R.id.textViewDesc);
@@ -92,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements OpenWeatherRestCo
         anotherInfoLayout   = (LinearLayout) findViewById(R.id.anotherInfoLayout);
         resultLayout        = (LinearLayout) findViewById(R.id.resultLayout);
         imageViewWeather    = (ImageView) findViewById(R.id.imageView);
-        mActionBarToolbar   = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
             setSupportActionBar(mActionBarToolbar);
     }
 
@@ -114,16 +109,14 @@ public class MainActivity extends ActionBarActivity implements OpenWeatherRestCo
     @Override
     public void onFetchProgress(OpenWeatherPojo mOpenWeatherPojo) {
 
-        Weather mWeather = mOpenWeatherPojo.getWeather().get(FIRST);
+        Weather mWeather = mOpenWeatherPojo.getWeather().get(0);
         Sys mSys = mOpenWeatherPojo.getSys();
         Coord mCoord = mOpenWeatherPojo.getCoord();
         Main mMain = mOpenWeatherPojo.getMain();
-        Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/drawable/w" + mWeather.getIcon() + ".jpg");
-        Log.d(TAG, uri.toString());
         /**
          * Add data to view's
          */
-        Picasso.with(getApplicationContext()).load(R.drawable.w04d).into(imageViewWeather);
+        Picasso.with(getApplicationContext()).load(Constants.CONDITIONS[getIndex(mWeather.getIcon())]).into(imageViewWeather);
         city.setText(mOpenWeatherPojo.getName() + " " + mSys.getCountry());
         desc.setText(mWeather.getDescription());
             temp.setText(String.valueOf(TemperatureController.toCelsius(mMain.getTemp()) + "°"));
@@ -150,7 +143,9 @@ public class MainActivity extends ActionBarActivity implements OpenWeatherRestCo
     @Override
     public void onFetchFailed() {
         Toast.makeText(getApplicationContext(), "Error occurred. Please try again!", Toast.LENGTH_SHORT).show();
-        progressLayout.setVisibility(View.GONE);
+        if(progressLayout.getVisibility() == View.VISIBLE) {
+            progressLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -173,5 +168,14 @@ public class MainActivity extends ActionBarActivity implements OpenWeatherRestCo
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    /**
+     *
+     * @param s input String
+     * @return index of drawable
+     */
+    private int getIndex(String s) {
+        return Integer.parseInt(s.replaceAll("\\D+", ""));
     }
 }

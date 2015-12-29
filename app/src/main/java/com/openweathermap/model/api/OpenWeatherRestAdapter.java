@@ -18,8 +18,8 @@ public class OpenWeatherRestAdapter {
 
     public OpenWeatherRestAdapter() {
         OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.setConnectTimeout(6000, TimeUnit.MILLISECONDS);
-            okHttpClient.setReadTimeout(6000, TimeUnit.MILLISECONDS);
+            okHttpClient.setConnectTimeout(20000, TimeUnit.MILLISECONDS);
+            okHttpClient.setReadTimeout(20000, TimeUnit.MILLISECONDS);
 
         GsonBuilder gsonBuilder = new GsonBuilder();
 
