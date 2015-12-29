@@ -19,7 +19,6 @@ import com.openweathermap.controllers.TemperatureController;
 import com.openweathermap.model.pojo.Coord;
 import com.openweathermap.model.pojo.Main;
 import com.openweathermap.model.pojo.OpenWeatherPojo;
-import com.openweathermap.model.pojo.Sys;
 import com.openweathermap.model.pojo.Weather;
 import com.openweathermap.model.utils.Constants;
 import com.squareup.picasso.Picasso;
@@ -110,20 +109,20 @@ public class MainActivity extends AppCompatActivity implements OpenWeatherRestCo
     public void onFetchProgress(OpenWeatherPojo mOpenWeatherPojo) {
 
         Weather mWeather = mOpenWeatherPojo.getWeather().get(0);
-        Sys mSys = mOpenWeatherPojo.getSys();
         Coord mCoord = mOpenWeatherPojo.getCoord();
         Main mMain = mOpenWeatherPojo.getMain();
+
         /**
          * Add data to view's
          */
         Picasso.with(getApplicationContext()).load(Constants.CONDITIONS[getIndex(mWeather.getIcon())]).into(imageViewWeather);
-        city.setText(mOpenWeatherPojo.getName() + " " + mSys.getCountry());
-        desc.setText(mWeather.getDescription());
+            city.setText(String.valueOf(mOpenWeatherPojo.getName() + " " + mOpenWeatherPojo.getSys().getCountry()));
+            desc.setText(mWeather.getDescription());
             temp.setText(String.valueOf(TemperatureController.toCelsius(mMain.getTemp()) + "°"));
-            pressure.setText(mMain.getPressure().toString());
-            humidity.setText(mMain.getHumidity().toString());
-            lat.setText(mCoord.getLat().toString());
-            lon.setText(mCoord.getLon().toString());
+            pressure.setText(String.valueOf(mMain.getPressure()));
+            humidity.setText(String.valueOf(mMain.getHumidity()));
+            lat.setText(String.valueOf(mCoord.getLat()));
+            lon.setText(String.valueOf(mCoord.getLon()));
 
         resultLayout.setVisibility(View.VISIBLE);
         anotherInfoLayout.setVisibility(View.VISIBLE);
