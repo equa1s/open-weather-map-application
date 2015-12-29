@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OpenWeatherRestCo
     private final String TAG = getClass().getSimpleName();
     private OpenWeatherRestController mOpenWeatherRestController;
     private TextView city, temp, desc, pressure, humidity, lon, lat;
-    private LinearLayout startLayout, resultLayout, progressLayout, anotherInfoLayout;
+    private LinearLayout startLayout, resultLayout, progressLayout, anotherInfoLayout, errorLayout;
     private ImageView imageViewWeather;
 
 
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements OpenWeatherRestCo
         progressLayout      = (LinearLayout) findViewById(R.id.progressLayout);
         anotherInfoLayout   = (LinearLayout) findViewById(R.id.anotherInfoLayout);
         resultLayout        = (LinearLayout) findViewById(R.id.resultLayout);
+        errorLayout         = (LinearLayout) findViewById(R.id.errorLayout);
         imageViewWeather    = (ImageView) findViewById(R.id.imageView);
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
             setSupportActionBar(mActionBarToolbar);
@@ -126,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements OpenWeatherRestCo
 
         resultLayout.setVisibility(View.VISIBLE);
         anotherInfoLayout.setVisibility(View.VISIBLE);
+        if(errorLayout.getVisibility() == View.VISIBLE) {
+            errorLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -142,8 +146,15 @@ public class MainActivity extends AppCompatActivity implements OpenWeatherRestCo
     @Override
     public void onFetchFailed() {
         Toast.makeText(getApplicationContext(), "Error occurred. Please try again!", Toast.LENGTH_SHORT).show();
+        if(resultLayout.getVisibility() == View.VISIBLE && anotherInfoLayout.getVisibility() == View.VISIBLE) {
+            resultLayout.setVisibility(View.GONE);
+            anotherInfoLayout.setVisibility(View.GONE);
+        }
         if(progressLayout.getVisibility() == View.VISIBLE) {
             progressLayout.setVisibility(View.GONE);
+        }
+        if(errorLayout.getVisibility() != View.VISIBLE) {
+            errorLayout.setVisibility(View.VISIBLE);
         }
     }
 

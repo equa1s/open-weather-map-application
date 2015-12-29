@@ -206,6 +206,25 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:id="@+id/errorLayout" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView5"
+                    android:textColor="#ff6f6f6f"
+                    android:text="Sorry something went wrong. Please try again!"
+                    android:gravity="center"
+                    android:textSize="18dp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
